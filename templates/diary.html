@@ -2,56 +2,135 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
+
     {% if page.title %}
     <title>{{ page.title }}</title>
     {% else %}
-    <title>bugswriter's diary</title>
+    <title>om's diary</title>
     {% endif %}
-    <meta name="description" content="<your site description goes here>">
-    <meta name="author" content="<your name>">
+
+    <meta name="description" content="Om's personal blog and diary">
+    <meta name="author" content="Om Yewale">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <link rel="stylesheet" href="/css/diary.css">
     <link rel="icon" type="image/png" href="/favicon.ico">
+
+    <script>
+      
+      (function () {
+        const savedTheme = localStorage.getItem("theme");
+
+        if (savedTheme === "dark") {
+          document.documentElement.setAttribute("data-theme", "dark");
+        }
+      })();
+    </script>
   </head>
+
   <body>
     <header>
-      <h2>{{ section.title }}</h2>
+      <div class="topbar">
+        <h2>{{ section.title }}</h2>
+
+        <div class="actions">
+          <a class="home-button" href="https://omeey.vercel.app">
+            Home
+          </a>
+
+          <button
+            id="theme-toggle"
+            class="theme-toggle"
+            type="button"
+            aria-label="Toggle dark and light mode"
+          >
+            Dark Mode
+          </button>
+        </div>
+      </div>
+
       <hr/>
+
       <figure>
-	<img alt="lain using computers" src="https://media.tenor.com/mjWYgxi6RS8AAAAC/lain-typing.gif" width="500px" />
-      <figcaption>~ serial experiments lain</figcaption>
-            </figure>
+        <img
+          alt="lain using computers"
+          src="https://media.tenor.com/mjWYgxi6RS8AAAAC/lain-typing.gif"
+          width="500px"
+        />
+        <figcaption>~ serial experiments lain</figcaption>
+      </figure>
     </header>
+
     <p>
-	  <code>Please edit ./templates/diary.html</code><br>
-      Hi, I am {your name}. I was born in <b>{DOB}</b>.<br>
+      <code>Please edit ./templates/diary.html</code><br>
+      Hi, I am Om Yewale. I was born in <b>{DOB}</b>.<br>
       Today's date - <b>{current date}</b>.<br>
-	  { write your rant }
-    <hr/>    
-	<h3>format of your header in md file in content dir.</h3>
-	<pre>
-	+++
-	title = "2023.01.01 Monday pm 23:12"
-	+++
-	</pre>
+      { write your rant }
+    </p>
+
+    <hr/>
+
+    <h3>format of your header in md file in content dir.</h3>
+
+    <pre>
++++
+title = "2023.01.01 Monday pm 23:12"
++++
+    </pre>
 
     <div class="posts">
-      {% for page in paginator.pages  %}
+      {% for page in paginator.pages %}
       <article class="post" id="{{ page.title }}">
-	<h4><a href="#{{ page.title }}"> # </a> {{ page.title }}</h4>
-	<div class="post__summary">
-	  {{ page.content | safe }}
-	</div>
+        <h4>
+          <a href="#{{ page.title }}">#</a>
+          {{ page.title }}
+        </h4>
+
+        <div class="post__summary">
+          {{ page.content | safe }}
+        </div>
       </article>
       {% endfor %}
     </div>
+
     <nav class="pagination">
       {% if paginator.previous %}
       <a class="previous" href="{{ paginator.previous }}">‹ Prev</a>
       {% endif %}
+
       {% if paginator.next %}
       <a class="next" href="{{ paginator.next }}">Next ›</a>
       {% endif %}
     </nav>
+
+    <script>
+      const themeToggle = document.getElementById("theme-toggle");
+
+      function updateThemeButton() {
+        const isDark =
+          document.documentElement.getAttribute("data-theme") === "dark";
+
+        themeToggle.textContent = isDark
+          ? "Light Mode"
+          : "Dark Mode";
+      }
+
+      themeToggle.addEventListener("click", function () {
+        const isDark =
+          document.documentElement.getAttribute("data-theme") === "dark";
+
+        if (isDark) {
+          document.documentElement.removeAttribute("data-theme");
+          localStorage.setItem("theme", "light");
+        } else {
+          document.documentElement.setAttribute("data-theme", "dark");
+          localStorage.setItem("theme", "dark");
+        }
+
+        updateThemeButton();
+      });
+
+      updateThemeButton();
+    </script>
   </body>
 </html>
