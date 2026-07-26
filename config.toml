@@ -1,11 +1,14 @@
+# The URL where your blog is hosted
 base_url = "https://omee-y.github.io/my-diary"
 
+# Disable Sass compilation
 compile_sass = false
 
+# Build search index
 build_search_index = true
 
 [markdown]
-highlight_code = true
-highlight_theme = "dracula"
+# Enable syntax highlighting with Dracula theme
+highlighting = "dracula"
 
 [extra]
