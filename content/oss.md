@@ -191,6 +191,3 @@ The `Merged` label is nice
 
 Understanding the codebase is better
 
-And if this was useful, you can find me on X or GitHub
-
-Now go find a repository and make it a little better
