@@ -4,37 +4,62 @@
     <meta charset="utf-8">
 
     {% if page.title %}
-    <title>{{ page.title }}</title>
+      <title>{{ page.title }}</title>
     {% else %}
-    <title>om's diary</title>
+      <title>om's diary</title>
     {% endif %}
 
-    <meta name="description" content="Om's personal blog and diary">
+    <meta
+      name="description"
+      content="Om's personal blog and online diary"
+    >
     <meta name="author" content="Om Yewale">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" href="/css/diary.css">
-    <link rel="icon" type="image/png" href="/favicon.ico">
+    <!-- Zola automatically handles the GitHub Pages base path -->
+    <link
+      rel="stylesheet"
+      href="{{ get_url(path='css/diary.css') }}"
+    >
 
+    <link
+      rel="icon"
+      type="image/png"
+      href="{{ get_url(path='favicon.ico') }}"
+    >
+
+  
     <script>
-      
       (function () {
         const savedTheme = localStorage.getItem("theme");
 
         if (savedTheme === "dark") {
-          document.documentElement.setAttribute("data-theme", "dark");
+          document.documentElement.setAttribute(
+            "data-theme",
+            "dark"
+          );
         }
       })();
     </script>
   </head>
 
   <body>
+
+
     <header>
+
       <div class="topbar">
-        <h2>{{ section.title }}</h2>
+
+        <h2>
+          {{ section.title }}
+        </h2>
 
         <div class="actions">
-          <a class="home-button" href="https://omeey.vercel.app">
+
+          <a
+            class="home-button"
+            href="https://omeey.vercel.app"
+          >
             Home
           </a>
 
@@ -46,91 +71,233 @@
           >
             Dark Mode
           </button>
+
         </div>
+
       </div>
 
-      <hr/>
+      <hr>
 
       <figure>
+
         <img
           alt="lain using computers"
           src="https://media.tenor.com/mjWYgxi6RS8AAAAC/lain-typing.gif"
-          width="500px"
-        />
-        <figcaption>~ serial experiments lain</figcaption>
+          width="500"
+        >
+
+        <figcaption>
+          ~ serial experiments lain
+        </figcaption>
+
       </figure>
+
     </header>
 
-    <p>
-      <code>Please edit ./templates/diary.html</code><br>
-      Hi, I am Om Yewale. I was born in <b>{DOB}</b>.<br>
-      Today's date - <b>{current date}</b>.<br>
-      { write your rant }
-    </p>
 
-    <hr/>
 
-    <h3>format of your header in md file in content dir.</h3>
+    <section class="intro">
 
-    <pre>
+      <p>
+        <code>Welcome to Om's diary.</code>
+        <br>
+
+        Hi, I am Om Yewale.
+        <br>
+
+        Today's date -
+        <b>
+          {{ now() | date(format="%Y-%m-%d") }}
+        </b>.
+        <br>
+
+        I write about programming, projects,
+        random thoughts, things I'm learning,
+        and whatever else ends up in my head.
+      </p>
+
+    </section>
+
+
+
+    <section class="markdown-info">
+
+      <hr>
+
+      <h3>
+        Markdown post format
+      </h3>
+
+      <p>
+        Create a Markdown file inside the
+        <code>content</code> directory.
+      </p>
+
+      <pre>
 +++
-title = "2023.01.01 Monday pm 23:12"
+title = "My First Blog Post"
+date = 2026-07-26
 +++
-    </pre>
 
-    <div class="posts">
-      {% for page in paginator.pages %}
-      <article class="post" id="{{ page.title }}">
-        <h4>
-          <a href="#{{ page.title }}">#</a>
-          {{ page.title }}
-        </h4>
+# Hello World
 
-        <div class="post__summary">
-          {{ page.content | safe }}
-        </div>
-      </article>
-      {% endfor %}
-    </div>
+This is my first post.
 
-    <nav class="pagination">
-      {% if paginator.previous %}
-      <a class="previous" href="{{ paginator.previous }}">‹ Prev</a>
+I am writing about something interesting.
+      </pre>
+
+    </section>
+
+
+
+
+    <main class="posts">
+
+      {% if paginator.pages %}
+
+        {% for page in paginator.pages %}
+
+          <article
+            class="post"
+            id="{{ page.slug }}"
+          >
+
+            <h4>
+
+              <a
+                href="#{{ page.slug }}"
+                aria-label="Link to {{ page.title }}"
+              >
+                #
+              </a>
+
+              {{ page.title }}
+
+            </h4>
+
+            <div class="post__summary">
+
+              {{ page.content | safe }}
+
+            </div>
+
+          </article>
+
+        {% endfor %}
+
+      {% else %}
+
+        <p>
+          No posts yet.
+        </p>
+
       {% endif %}
+
+    </main>
+
+
+    <nav
+      class="pagination"
+      aria-label="Blog pagination"
+    >
+
+      {% if paginator.previous %}
+
+        <a
+          class="previous"
+          href="{{ paginator.previous }}"
+        >
+          ‹ Prev
+        </a>
+
+      {% endif %}
+
 
       {% if paginator.next %}
-      <a class="next" href="{{ paginator.next }}">Next ›</a>
+
+        <a
+          class="next"
+          href="{{ paginator.next }}"
+        >
+          Next ›
+        </a>
+
       {% endif %}
+
     </nav>
 
+
+
+
     <script>
-      const themeToggle = document.getElementById("theme-toggle");
+
+      const themeToggle =
+        document.getElementById("theme-toggle");
 
       function updateThemeButton() {
-        const isDark =
-          document.documentElement.getAttribute("data-theme") === "dark";
 
-        themeToggle.textContent = isDark
-          ? "Light Mode"
-          : "Dark Mode";
+        const isDark =
+          document.documentElement
+            .getAttribute("data-theme") === "dark";
+
+        themeToggle.textContent =
+          isDark
+            ? "Light Mode"
+            : "Dark Mode";
+
+        themeToggle.setAttribute(
+          "aria-label",
+          isDark
+            ? "Switch to light mode"
+            : "Switch to dark mode"
+        );
       }
 
-      themeToggle.addEventListener("click", function () {
-        const isDark =
-          document.documentElement.getAttribute("data-theme") === "dark";
 
-        if (isDark) {
-          document.documentElement.removeAttribute("data-theme");
-          localStorage.setItem("theme", "light");
-        } else {
-          document.documentElement.setAttribute("data-theme", "dark");
-          localStorage.setItem("theme", "dark");
+      themeToggle.addEventListener(
+        "click",
+        function () {
+
+          const isDark =
+            document.documentElement
+              .getAttribute("data-theme") === "dark";
+
+
+          if (isDark) {
+
+            document.documentElement
+              .removeAttribute("data-theme");
+
+            localStorage.setItem(
+              "theme",
+              "light"
+            );
+
+          } else {
+
+            document.documentElement
+              .setAttribute(
+                "data-theme",
+                "dark"
+              );
+
+            localStorage.setItem(
+              "theme",
+              "dark"
+            );
+
+          }
+
+          updateThemeButton();
+
         }
+      );
 
-        updateThemeButton();
-      });
 
+    
       updateThemeButton();
+
     </script>
+
   </body>
 </html>
