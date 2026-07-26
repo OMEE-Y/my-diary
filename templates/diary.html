@@ -41,18 +41,20 @@
   <div class="diary-container">
 
     <div class="diary-intro">
-      <div class="diary-intro-text">
-        <p class="terminal-line">~/{{ section.title | lower }}</p>
-        {% if section.description %}
-          <p>{{ section.description }}</p>
-        {% endif %}
-      </div>
-    
-      <div class="gif-frame">
-        <div class="frame-inner">
-       <img src="https://media.tenor.com/mjWYgxi6RS8AAAAC/lain-typing.gif" alt="" srcset="">
-        </div>
-      </div>
+    <div class="diary-intro-text">
+  {% if section.description %}
+    <p>{{ section.description }}</p>
+  {% endif %}
+</div>
+
+<div class="gif-frame">
+  <div class="frame-inner">
+    <img
+      src="https://media.tenor.com/mjWYgxi6RS8AAAAC/lain-typing.gif"
+      alt="Lain typing"
+    >
+  </div>
+</div>
     </div>
 
     <div class="section-label">
