@@ -2,177 +2,88 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-
   <title>{{ page.title }} | Om's Diary</title>
-
-  <meta
-    name="description"
-    content="Om's personal blog and online diary"
-  >
-
+  <meta name="description" content="Om's personal blog and online diary">
   <meta name="author" content="Om Yewale">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1"
-  >
-
-  <link
-    rel="stylesheet"
-    href="{{ get_url(path='css/diary.css') }}"
-  >
-
-  <link
-    rel="icon"
-    type="image/png"
-    href="{{ get_url(path='favicon.ico') }}"
-  >
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="{{ get_url(path='css/diary.css') }}">
+  <link rel="icon" type="image/png" href="{{ get_url(path='favicon.ico') }}">
+  <script>
+    (function () {
+      const savedTheme = localStorage.getItem("theme");
+      if (savedTheme === "dark") {
+        document.documentElement.setAttribute("data-theme", "dark");
+      }
+    })();
+  </script>
 </head>
-
 <body>
 
-  <header>
-
+  <header class="site-header">
     <div class="topbar">
-
-      <h2>
-        <a href="{{ get_url(path='') }}">
-          om's diary
-        </a>
-      </h2>
-
-      <div class="actions">
-
-        <a
-          class="home-button"
-          href="https://omeey.vercel.app"
-        >
-          Home
-        </a>
-
-        <button
-          id="theme-toggle"
-          class="theme-toggle"
-          type="button"
-        >
-          Dark Mode
-        </button>
-
+      <div class="brand">
+        <svg class="pixel-mark" width="16" height="16" viewBox="0 0 8 8" shape-rendering="crispEdges" fill="currentColor">
+          <rect x="1" y="0" width="6" height="1"/>
+          <rect x="0" y="1" width="1" height="6"/>
+          <rect x="7" y="1" width="1" height="6"/>
+          <rect x="1" y="7" width="6" height="1"/>
+          <rect x="3" y="3" width="2" height="2"/>
+        </svg>
+        <a class="site-title" href="{{ get_url(path='') }}">om's diary</a>
       </div>
-
+      <div class="actions">
+        <a class="home-button" href="https://omeey.vercel.app">home</a>
+        <button id="theme-toggle" class="theme-toggle" type="button">dark</button>
+      </div>
     </div>
-
-    <hr>
-
   </header>
 
-
   <main class="single-post">
+    <div class="post-breadcrumb">
+      <a href="{{ get_url(path='') }}">entries</a>
+      <span>/</span>
+      <span>{{ page.title }}</span>
+    </div>
 
     <article>
-
-      <h1>
-        {{ page.title }}
-      </h1>
-
-      {% if page.date %}
-        <p class="post-date">
-          {{ page.date | date(format="%b %d, %Y") }}
-        </p>
-      {% endif %}
+      <header class="entry-header">
+        <h1>{{ page.title }}</h1>
+        {% if page.date %}
+          <p class="post-date">{{ page.date | date(format="%b %d, %Y") }}</p>
+        {% endif %}
+      </header>
 
       <div class="post-content">
-
         {{ page.content | safe }}
-
       </div>
-
     </article>
-
   </main>
 
-
   <footer>
-
-    <a href="{{ get_url(path='') }}">
-      ← Back to writing
-    </a>
-
+    <a href="{{ get_url(path='') }}">&larr; back to writing</a>
   </footer>
 
-
   <script>
-
-    const themeToggle =
-      document.getElementById("theme-toggle");
+    const themeToggle = document.getElementById("theme-toggle");
 
     function updateThemeButton() {
-
-      const isDark =
-        document.documentElement
-          .getAttribute("data-theme") === "dark";
-
-      themeToggle.textContent =
-        isDark
-          ? "Light Mode"
-          : "Dark Mode";
+      const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+      themeToggle.textContent = isDark ? "light" : "dark";
     }
 
-
-    const savedTheme =
-      localStorage.getItem("theme");
-
-    if (savedTheme === "dark") {
-
-      document.documentElement
-        .setAttribute(
-          "data-theme",
-          "dark"
-        );
-    }
-
-
-    themeToggle.addEventListener(
-      "click",
-      function () {
-
-        const isDark =
-          document.documentElement
-            .getAttribute("data-theme") === "dark";
-
-
-        if (isDark) {
-
-          document.documentElement
-            .removeAttribute("data-theme");
-
-          localStorage.setItem(
-            "theme",
-            "light"
-          );
-
-        } else {
-
-          document.documentElement
-            .setAttribute(
-              "data-theme",
-              "dark"
-            );
-
-          localStorage.setItem(
-            "theme",
-            "dark"
-          );
-        }
-
-        updateThemeButton();
-
+    themeToggle.addEventListener("click", function () {
+      const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+      if (isDark) {
+        document.documentElement.removeAttribute("data-theme");
+        localStorage.setItem("theme", "light");
+      } else {
+        document.documentElement.setAttribute("data-theme", "dark");
+        localStorage.setItem("theme", "dark");
       }
-    );
-
+      updateThemeButton();
+    });
 
     updateThemeButton();
-
   </script>
 
 </body>

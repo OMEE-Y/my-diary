@@ -1,7 +1,4 @@
-+++
-title = "Markdown Complete Test"
-date = 2026-07-26
-+++
+
 
 # Markdown Complete Test
 

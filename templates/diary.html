@@ -1,231 +1,116 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
   <meta charset="utf-8">
-
-  <title>
-    {{ section.title }} | Om's Diary
-  </title>
-
-  <meta
-    name="description"
-    content="Om's personal blog and online diary"
-  >
-
-  <meta
-    name="author"
-    content="Om Yewale"
-  >
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1"
-  >
-
-  <link
-    rel="stylesheet"
-    href="{{ get_url(path='css/diary.css') }}"
-  >
-
-  <link
-    rel="icon"
-    type="image/png"
-    href="{{ get_url(path='favicon.ico') }}"
-  >
-
+  <title>{{ section.title }} | Om's Diary</title>
+  <meta name="description" content="Om's personal blog and online diary">
+  <meta name="author" content="Om Yewale">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="{{ get_url(path='css/diary.css') }}">
+  <link rel="icon" type="image/png" href="{{ get_url(path='favicon.ico') }}">
   <script>
-
     (function () {
-
-      const savedTheme =
-        localStorage.getItem("theme");
-
+      const savedTheme = localStorage.getItem("theme");
       if (savedTheme === "dark") {
-
-        document.documentElement
-          .setAttribute(
-            "data-theme",
-            "dark"
-          );
+        document.documentElement.setAttribute("data-theme", "dark");
       }
-
     })();
-
   </script>
-
 </head>
-
-
 <body>
 
-
-<header>
-
-  <div class="topbar">
-
-    <h2>
-      # {{ section.title }}
-    </h2>
-
-    <div class="actions">
-
-      <a
-        class="home-button"
-        href="https://omeey.vercel.app"
-      >
-        Home
-      </a>
-
-      <button
-        id="theme-toggle"
-        class="theme-toggle"
-        type="button"
-      >
-        Dark Mode
-      </button>
-
+  <header class="site-header">
+    <div class="topbar">
+      <div class="brand">
+        <svg class="pixel-mark" width="16" height="16" viewBox="0 0 8 8" shape-rendering="crispEdges" fill="currentColor">
+          <rect x="1" y="0" width="6" height="1"/>
+          <rect x="0" y="1" width="1" height="6"/>
+          <rect x="7" y="1" width="1" height="6"/>
+          <rect x="1" y="7" width="6" height="1"/>
+          <rect x="3" y="3" width="2" height="2"/>
+        </svg>
+        <a class="site-title" href="{{ get_url(path='') }}"># {{ section.title }}</a>
+      </div>
+      <div class="actions">
+        <a class="home-button" href="https://omeey.vercel.app">home</a>
+        <button id="theme-toggle" class="theme-toggle" type="button">dark</button>
+      </div>
     </div>
+  </header>
+
+  <div class="diary-container">
+
+    <div class="diary-intro">
+      <div class="diary-intro-text">
+        <p class="terminal-line">~/{{ section.title | lower }}</p>
+        {% if section.description %}
+          <p>{{ section.description }}</p>
+        {% endif %}
+      </div>
+      <!-- drop your own gif/image in here, it'll sit in a bordered frame -->
+      <div class="gif-frame">
+        <div class="frame-inner">
+          <!-- <img src="/img/your-gif.gif" alt=""> -->
+        </div>
+      </div>
+    </div>
+
+    <div class="section-label">
+      <span>entries</span>
+      <span>{{ paginator.pages | length }}</span>
+    </div>
+
+    <main class="posts">
+      {% for page in paginator.pages %}
+        <article class="post-card">
+          <a href="{{ page.permalink }}" class="post-card-link">
+            <div class="post-info">
+              <h3>{{ page.title }}</h3>
+              {% if page.date %}
+                <p class="post-meta">{{ page.date | date(format="%b %d, %Y") }}</p>
+              {% endif %}
+            </div>
+            <span class="read-more">read</span>
+          </a>
+        </article>
+      {% endfor %}
+    </main>
+
+    <nav class="pagination">
+      {% if paginator.previous %}
+        <a class="previous" href="{{ paginator.previous }}">&lsaquo; prev</a>
+      {% else %}
+        <span></span>
+      {% endif %}
+      {% if paginator.next %}
+        <a class="next" href="{{ paginator.next }}">next &rsaquo;</a>
+      {% endif %}
+    </nav>
 
   </div>
 
-  <hr>
+  <script>
+    const themeToggle = document.getElementById("theme-toggle");
 
-</header>
-
-
-<main class="posts">
-
-  {% for page in paginator.pages %}
-
-    <article class="post-card">
-
-      <a
-        href="{{ page.permalink }}"
-        class="post-card-link"
-      >
-
-        <div class="post-icon">
-          📄
-        </div>
-
-        <div class="post-info">
-
-          <h3>
-            {{ page.title }}
-          </h3>
-
-          {% if page.date %}
-            <p>
-              {{ page.date | date(format="%b %d, %Y") }}
-            </p>
-          {% endif %}
-
-        </div>
-
-      </a>
-
-    </article>
-
-  {% endfor %}
-
-</main>
-
-
-<nav class="pagination">
-
-  {% if paginator.previous %}
-
-    <a
-      class="previous"
-      href="{{ paginator.previous }}"
-    >
-      ‹ Prev
-    </a>
-
-  {% endif %}
-
-
-  {% if paginator.next %}
-
-    <a
-      class="next"
-      href="{{ paginator.next }}"
-    >
-      Next ›
-    </a>
-
-  {% endif %}
-
-</nav>
-
-
-<script>
-
-  const themeToggle =
-    document.getElementById("theme-toggle");
-
-
-  function updateThemeButton() {
-
-    const isDark =
-      document.documentElement
-        .getAttribute("data-theme") === "dark";
-
-    themeToggle.textContent =
-      isDark
-        ? "Light Mode"
-        : "Dark Mode";
-
-  }
-
-
-  themeToggle.addEventListener(
-    "click",
-    function () {
-
-      const isDark =
-        document.documentElement
-          .getAttribute("data-theme") === "dark";
-
-
-      if (isDark) {
-
-        document.documentElement
-          .removeAttribute(
-            "data-theme"
-          );
-
-        localStorage.setItem(
-          "theme",
-          "light"
-        );
-
-      } else {
-
-        document.documentElement
-          .setAttribute(
-            "data-theme",
-            "dark"
-          );
-
-        localStorage.setItem(
-          "theme",
-          "dark"
-        );
-
-      }
-
-      updateThemeButton();
-
+    function updateThemeButton() {
+      const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+      themeToggle.textContent = isDark ? "light" : "dark";
     }
-  );
 
+    themeToggle.addEventListener("click", function () {
+      const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+      if (isDark) {
+        document.documentElement.removeAttribute("data-theme");
+        localStorage.setItem("theme", "light");
+      } else {
+        document.documentElement.setAttribute("data-theme", "dark");
+        localStorage.setItem("theme", "dark");
+      }
+      updateThemeButton();
+    });
 
-  updateThemeButton();
-
-</script>
-
+    updateThemeButton();
+  </script>
 
 </body>
 </html>
